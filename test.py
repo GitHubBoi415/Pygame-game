@@ -36,36 +36,91 @@ blockSize = 70
 grid_array_info = [0] * 100
 
 def imgFromNumber(number):
+    actual_number = number
     # actual_number = (round(random_seed_list[grid_number]) + number) % 12
-    # if (0 <= random_seed_list[grid_number] < 1):
-    match number % 12:
+    match actual_number % 12:
         case 0:
             return blank_img
         case 1:
-            return blank_img
+            return bomb_img
         case 2:
-            return blank_img
+            return clock_img
         case 3:
-            return bomb_img
-        case 4:
-            return bomb_img
-        case 5:
-            return clock_img
-        case 6:
-            return clock_img
-        case 7:
             return dice_img
+        case 4:
+            return heal_img
+        case 5:
+            return blank_img
+        case 6:
+            return bomb_img
+        case 7:
+            return clock_img
         case 8:
             return dice_img
         case 9:
             return heal_img
         case 10:
-            return heal_img
+            return blank_img
         case 11:
             return skull_img
         case _:
             return blank_img
-    # elif (0.1 <= random_seed_list[grid_number] < 0.2):
+    '''if (0 <= random_seed_list[2] < 50):
+        match actual_number % 12:
+            case 0:
+                return blank_img
+            case 1:
+                return bomb_img
+            case 2:
+                return clock_img
+            case 3:
+                return dice_img
+            case 4:
+                return heal_img
+            case 5:
+                return blank_img
+            case 6:
+                return bomb_img
+            case 7:
+                return clock_img
+            case 8:
+                return dice_img
+            case 9:
+                return heal_img
+            case 10:
+                return blank_img
+            case 11:
+                return skull_img
+            case _:
+                return blank_img
+    else:
+        match actual_number % 12:
+            case 0:
+                return blank_img
+            case 1:
+                return heal_img
+            case 2:
+                return clock_img
+            case 3:
+                return dice_img
+            case 4:
+                return bomb_img
+            case 5:
+                return blank_img
+            case 6:
+                return heal_img
+            case 7:
+                return clock_img
+            case 8:
+                return dice_img
+            case 9:
+                return bomb_img
+            case 10:
+                return blank_img
+            case 11:
+                return skull_img
+            case _:
+                return blank_img'''
 
 def drawGrid():
     # blockSize = 70 #Set the size of the grid block
@@ -82,8 +137,10 @@ def drawGrid():
             if ((grid_array_info[grid_identification_number]) == 0):
                 # screen.blit(imgFromNumber(random_seed + round(float(givetime()) * (0.1 * random_seed_list[grid_identification_number]) + (grid_identification_number + (random_seed_list[grid_identification_number]) * random_seed_list[grid_identification_number])) % 12), (x,y))
                 screen.blit(imgFromNumber(round((float(givetime()) + random_seed) * 0.01 * random_seed_list[grid_identification_number])), (x,y))
+                # screen.blit(imgFromNumber(1),(x,y))
             else:
                 screen.blit(disabled_img,(x,y))
+                # you need to find a way to get the number the screen blit was on
 def wait_until_key_released(key):
     while pygame.key.get_pressed()[key]:
         pygame.event.pump() # Handle internal pygame events
