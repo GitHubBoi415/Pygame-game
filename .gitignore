@@ -1,0 +1,4 @@
+#VSCode
+build/
+dist/
+test.spec
