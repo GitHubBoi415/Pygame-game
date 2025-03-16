@@ -123,6 +123,9 @@ def imgFromNumber(number):
                 return blank_img'''
 
 def drawGrid():
+
+    global random_seed_list
+
     # blockSize = 70 #Set the size of the grid block
     grid_xmin = round(CX(WINDOW_WIDTH))
     grid_ymin = round(CY(WINDOW_HEIGHT))
@@ -134,13 +137,26 @@ def drawGrid():
         for y in range(grid_ymin, grid_ymin + WINDOW_HEIGHT, blockSize):
             y_counter += 1
             grid_identification_number = (10*y_counter) + x_counter
+            target = round((float(givetime()) + random_seed) * 0.01 * random_seed_list[grid_identification_number] + grid_identification_number) % 12
             if ((grid_array_info[grid_identification_number]) == 0):
                 # screen.blit(imgFromNumber(random_seed + round(float(givetime()) * (0.1 * random_seed_list[grid_identification_number]) + (grid_identification_number + (random_seed_list[grid_identification_number]) * random_seed_list[grid_identification_number])) % 12), (x,y))
-                screen.blit(imgFromNumber(round((float(givetime()) + random_seed) * 0.01 * random_seed_list[grid_identification_number])), (x,y))
+                screen.blit(imgFromNumber(target), (x,y))
                 # screen.blit(imgFromNumber(1),(x,y))
+            elif ((grid_array_info[grid_identification_number]) == 1):
+                match int(target):
+                    case 3:
+                        print("ok")
+                        random_seed_list = [random.randint(0, 99) for _ in range(100)]
+                    case 8:
+                        print("ok")
+                        random_seed_list = [random.randint(0, 99) for _ in range(100)]
+                    case _:
+                        print(target)
+                grid_array_info[grid_identification_number] = 2
+                # you need to find a way to get the number the screen blit was on
             else:
                 screen.blit(disabled_img,(x,y))
-                # you need to find a way to get the number the screen blit was on
+
 def wait_until_key_released(key):
     while pygame.key.get_pressed()[key]:
         pygame.event.pump() # Handle internal pygame events
@@ -300,9 +316,11 @@ while running:
             pygame.draw.rect(screen,(110,110,110),button_2)
         screen.blit(surf,(button.x+5, button.y+5))
     if SC("Game"):
+
         # if (randomizer_timer < float(givetime())):
         #     random_seed_list = [random.randint(0, 99) for _ in range(100)]
         #     randomizer_timer += 1
+        
         screen.blit(select_img, (player_pos))
         
         # egg = font.render(str(player_pos.x) + ' ' + str(player_pos.y),True, 'white')
