@@ -257,7 +257,11 @@ random_seed_list = [random.randint(0, 99) for _ in range(100)]
 
 pygame.display.set_caption('i love being able to edit what the pygame window says')
 
+# WINDOWS
 imagepath = os.path.abspath(__file__)[:-len(os.path.basename(__file__))] + "\images"
+
+# MAC
+# imagepath = 
 # IMPORTANT!!! when distributing, use the lower line, the top one is for your personal 'puter
 start_img = pygame.transform.scale(pygame.image.load(imagepath + '\start_btn.png').convert_alpha(),(60,700))
 select_img = pygame.image.load(imagepath + '\Select.png')
