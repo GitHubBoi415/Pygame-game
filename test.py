@@ -40,9 +40,9 @@ def imgFromNumber(number):
     # actual_number = (round(random_seed_list[grid_number]) + number) % 12
     match actual_number % 12:
         case 0:
-            return blank_img
-        case 1:
             return bomb_img
+        case 1:
+            return blank_img
         case 2:
             return clock_img
         case 3:
@@ -65,62 +65,6 @@ def imgFromNumber(number):
             return skull_img
         case _:
             return blank_img
-    '''if (0 <= random_seed_list[2] < 50):
-        match actual_number % 12:
-            case 0:
-                return blank_img
-            case 1:
-                return bomb_img
-            case 2:
-                return clock_img
-            case 3:
-                return dice_img
-            case 4:
-                return heal_img
-            case 5:
-                return blank_img
-            case 6:
-                return bomb_img
-            case 7:
-                return clock_img
-            case 8:
-                return dice_img
-            case 9:
-                return heal_img
-            case 10:
-                return blank_img
-            case 11:
-                return skull_img
-            case _:
-                return blank_img
-    else:
-        match actual_number % 12:
-            case 0:
-                return blank_img
-            case 1:
-                return heal_img
-            case 2:
-                return clock_img
-            case 3:
-                return dice_img
-            case 4:
-                return bomb_img
-            case 5:
-                return blank_img
-            case 6:
-                return heal_img
-            case 7:
-                return clock_img
-            case 8:
-                return dice_img
-            case 9:
-                return bomb_img
-            case 10:
-                return blank_img
-            case 11:
-                return skull_img
-            case _:
-                return blank_img'''
 
 def drawGrid():
 
