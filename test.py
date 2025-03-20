@@ -110,7 +110,8 @@ def display_time(seconds):
     minutes, seconds = divmod(seconds, 60)
     hours, minutes = divmod(minutes, 60)
     # return f"{hours:02}:{minutes:02}:{seconds:02}"
-    return f"{seconds:02}"
+    # return f"{seconds:02}"
+    return seconds
 
 def truncate(f, n):
     '''Truncates/pads a float f to n decimal places without rounding'''
