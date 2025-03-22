@@ -40,27 +40,27 @@ def imgFromNumber(number):
     # actual_number = (round(random_seed_list[grid_number]) + number) % 12
     match actual_number % 12:
         case 0:
-            return bomb_img
-        case 1:
-            return blank_img
-        case 2:
             return clock_img
+        case 1:
+            return dice_img
+        case 2:
+            return bomb_img
         case 3:
             return dice_img
         case 4:
-            return heal_img
+            return clock_img
         case 5:
-            return blank_img
-        case 6:
             return bomb_img
+        case 6:
+            return dice_img
         case 7:
             return clock_img
         case 8:
             return dice_img
         case 9:
-            return heal_img
+            return bomb_img
         case 10:
-            return blank_img
+            return heal_img
         case 11:
             return skull_img
         case _:
@@ -69,6 +69,10 @@ def imgFromNumber(number):
 def drawGrid():
 
     global random_seed_list
+    global timer_bonus
+    global grid_swap_speed
+    global player_health
+    global running
 
     # blockSize = 70 #Set the size of the grid block
     grid_xmin = round(CX(WINDOW_WIDTH))
@@ -81,19 +85,37 @@ def drawGrid():
         for y in range(grid_ymin, grid_ymin + WINDOW_HEIGHT, blockSize):
             y_counter += 1
             grid_identification_number = (10*y_counter) + x_counter
-            target = round((float(givetime()) + random_seed) * 0.01 * random_seed_list[grid_identification_number] + grid_identification_number) % 12
+            target = round((float(givetime()) + random_seed) * (grid_swap_speed * 0.01) * random_seed_list[grid_identification_number] + grid_identification_number) % 12
             if ((grid_array_info[grid_identification_number]) == 0):
                 # screen.blit(imgFromNumber(random_seed + round(float(givetime()) * (0.1 * random_seed_list[grid_identification_number]) + (grid_identification_number + (random_seed_list[grid_identification_number]) * random_seed_list[grid_identification_number])) % 12), (x,y))
                 screen.blit(imgFromNumber(target), (x,y))
                 # screen.blit(imgFromNumber(1),(x,y))
             elif ((grid_array_info[grid_identification_number]) == 1):
                 match int(target):
+                    case 0:
+                        timer_bonus += 5
+                    case 1:
+                        random_seed_list = [random.randint(0, 99) for _ in range(100)]
+                    case 2:
+                        player_health -= 1
                     case 3:
-                        print("ok")
                         random_seed_list = [random.randint(0, 99) for _ in range(100)]
+                    case 4:
+                        timer_bonus += 5
+                    case 5:
+                        player_health -= 1
+                    case 6:
+                        random_seed_list = [random.randint(0, 99) for _ in range(100)]
+                    case 7:
+                        timer_bonus += 5
                     case 8:
-                        print("ok")
                         random_seed_list = [random.randint(0, 99) for _ in range(100)]
+                    case 9:
+                        player_health -= 1
+                    case 10:
+                        player_health += 1
+                    case 11:
+                        running = False
                     case _:
                         print(target)
                 grid_array_info[grid_identification_number] = 2
@@ -199,6 +221,9 @@ screen_type = "Menu"
 dt = 0
 random_seed = random.randint(999, 999999)
 random_seed_list = [random.randint(0, 99) for _ in range(100)]
+timer_bonus = 0
+grid_swap_speed = 1
+player_health = 5
 
 pygame.display.set_caption('i love being able to edit what the pygame window says')
 
@@ -225,6 +250,7 @@ font = pygame.font.SysFont('Georgia',40,bold=True)
 surf = font.render('Quit',True, 'white')
 button = pygame.Rect(200,200,110,60)
 button_2 = pygame.Rect(CX(110),CY(60),110,60)
+button_3 = pygame.Rect(CX(0),CY(-100),110,60)
 
 # ----------
 
@@ -239,11 +265,13 @@ while running:
             if button.collidepoint(event.pos):
                 pygame.quit()
             if button_2.collidepoint(event.pos):
+                screen_type = "Tutorial"
+                # t = threading.Thread(target=parallel_process)
+                # t.start()
+            if button_3.collidepoint(event.pos):
                 screen_type = "Game"
                 seconds_elapsed = 0
                 randomizer_timer = 0
-                # t = threading.Thread(target=parallel_process)
-                # t.start()
 
         if SC("Game"):
             movement()
@@ -264,24 +292,33 @@ while running:
         else:
             pygame.draw.rect(screen,(110,110,110),button_2)
         screen.blit(surf,(button.x+5, button.y+5))
+    if SC("Tutorial"):
+        if button_hovered_over(button_3):
+            pygame.draw.rect(screen,(180,180,180),button_3)
+        else:
+            pygame.draw.rect(screen,(110,110,110),button_3)
     if SC("Game"):
 
         # if (randomizer_timer < float(givetime())):
         #     random_seed_list = [random.randint(0, 99) for _ in range(100)]
         #     randomizer_timer += 1
-        
+        if (player_health <= 0):
+            running = False
         screen.blit(select_img, (player_pos))
-        
+        grid_swap_speed = 1.0
         # egg = font.render(str(player_pos.x) + ' ' + str(player_pos.y),True, 'white')
         egg = font.render('fps: ' + str(clock)[11:16],True, 'white')
         screen.blit(egg,(0, 0))
         start_time = time.time()
         end_time = time.time()
-        # elapsed_time = end_time - start_time
+        # elapsed_time = end_time - start_times
         # timer = font.render(f"Elapsed time: {elapsed_time:.2f} seconds",True, 'white')
-        timer = font.render(f"Timer: " + str(givetime()),True, 'white')
+        time_to_display = truncate((float(givetime()) + timer_bonus), 3)
+        timer = font.render(f"Timer: " + str((time_to_display)),True, 'white')
         # timer = font.render(f"Timer: " + str(givetime()),3,True, 'white')
+        health_display = font.render(f"HP: " + str((player_health)),True, 'white')
         screen.blit(timer,(0, 50))
+        screen.blit(health_display,(0, 100))
         seconds_elapsed += dt
         drawGrid()
 
