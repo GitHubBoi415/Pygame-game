@@ -369,13 +369,17 @@ while running:
         sawbladeU_y -= sawblade_speed + 3
         sawbladeD_y += sawblade_speed + 4
         if (coordinates_touching(player_pos.x,player_pos.y,sawbladeR_x,sawbladeR_y,50)):
-            print("RIGHT TOUCHING")
+            player_health -= 1
+            sawbladeR_x = 1300
         if (coordinates_touching(player_pos.x,player_pos.y,sawbladeL_x,sawbladeL_y,50)):
-            print("LEFT TOUCHING")
+            player_health -= 1
+            sawbladeL_x = -100
         if (coordinates_touching(player_pos.x,player_pos.y,sawbladeU_x,sawbladeU_y,50)):
-            print("UP TOUCHING")
+            player_health -= 1
+            sawbladeU_y = -100
         if (coordinates_touching(player_pos.x,player_pos.y,sawbladeD_x,sawbladeD_y,50)):
-            print("DOWN TOUCHING")
+            player_health -= 1
+            sawbladeD_y = 1000
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeR_x,sawbladeR_y))
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeL_x,sawbladeL_y))
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeU_x,sawbladeU_y))
