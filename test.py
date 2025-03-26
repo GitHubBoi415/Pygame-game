@@ -263,6 +263,7 @@ skull_img = pygame.image.load(imagepath + '\Skull.png')
 disabled_img = pygame.image.load(imagepath + '\Disabled.png')
 reset_img = pygame.image.load(imagepath + '\Reset.png')
 sawblade_img = pygame.image.load(imagepath + '\Sawblade.png')
+intro_tutorial_screen = pygame.image.load(imagepath + '\Intro Tutorial Screen.png')
 # start_img = pygame.image.load(resource_path('start_btn.png')).convert_alpha()
 
 player_pos = pygame.Vector2((screen.get_width()/2) - 8, (screen.get_height()/2) - 8)
@@ -324,6 +325,7 @@ while running:
             pygame.draw.rect(screen,(110,110,110),button_2)
         screen.blit(surf,(button.x+5, button.y+5))
     if SC("Tutorial"):
+        screen.blit(intro_tutorial_screen,(0,0))
         if button_hovered_over(button_3):
             pygame.draw.rect(screen,(180,180,180),button_3)
         else:
@@ -368,16 +370,16 @@ while running:
         sawbladeL_x -= sawblade_speed + 2
         sawbladeU_y -= sawblade_speed + 3
         sawbladeD_y += sawblade_speed + 4
-        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeR_x,sawbladeR_y,50)):
+        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeR_x,sawbladeR_y,130)):
             player_health -= 1
             sawbladeR_x = 1300
-        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeL_x,sawbladeL_y,50)):
+        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeL_x,sawbladeL_y,130)):
             player_health -= 1
             sawbladeL_x = -100
-        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeU_x,sawbladeU_y,50)):
+        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeU_x,sawbladeU_y,130)):
             player_health -= 1
             sawbladeU_y = -100
-        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeD_x,sawbladeD_y,50)):
+        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeD_x,sawbladeD_y,130)):
             player_health -= 1
             sawbladeD_y = 1000
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeR_x,sawbladeR_y))
