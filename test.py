@@ -167,10 +167,12 @@ def fast_movement():
             player_pos.x += blockSize
         wait_until_key_released(pygame.K_d)
     if keys[pygame.K_SPACE]:
+        # THIS CODE DOESN'T ACTUALLY DO ANYTHING
         ones = (player_pos.x - 242) / 70
         tens = ((player_pos.y - 92) / 70)
         select_target = (tens*10) + ones
-        grid_array_info[int(select_target)] = 1
+        if (grid_array_info[int(select_target)]) == 0:
+            grid_array_info[int(select_target)] = 1
         print(select_target)
 
 def movement_example():
@@ -206,7 +208,8 @@ def movement():
             ones = (player_pos.x - 242) / 70
             tens = ((player_pos.y - 92) / 70)
             select_target = (tens*10) + ones
-            grid_array_info[int(select_target)] = 1
+            if (grid_array_info[int(select_target)]) == 0:
+                grid_array_info[int(select_target)] = 1
 
 def parallel_process():
     while True:
