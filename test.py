@@ -398,8 +398,9 @@ while running:
         seconds_elapsed += dt
     if SC("Death"):
         time_to_display = truncate((float(givetime()) + timer_bonus), 3)
+        timer_length = len("Timer: " + str((time_to_display)))
         timer = font.render(f"Timer: " + str((time_to_display)),True, 'white')
-        screen.blit(timer,(0, 50))
+        screen.blit(timer,(CX(timer_length*20), CY(0)))
         # running = False
         
     # flip() the display to put your work on screen
