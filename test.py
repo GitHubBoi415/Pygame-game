@@ -72,6 +72,7 @@ def drawGrid():
     global grid_swap_speed
     global player_health
     global running
+    global screen_type
 
     # blockSize = 70 #Set the size of the grid block
     grid_xmin = round(CX(WINDOW_WIDTH))
@@ -115,7 +116,7 @@ def drawGrid():
                     case 10:
                         player_health += 1
                     case 11:
-                        running = False
+                        screen_type = "Death"
                     case _:
                         print(target)
                 grid_array_info[grid_identification_number] = 2
@@ -263,6 +264,8 @@ skull_img = pygame.image.load(imagepath + '\Skull.png')
 disabled_img = pygame.image.load(imagepath + '\Disabled.png')
 reset_img = pygame.image.load(imagepath + '\Reset.png')
 sawblade_img = pygame.image.load(imagepath + '\Sawblade.png')
+end_tutorial_button = pygame.image.load(imagepath + '\End Tutorial Button.png')
+end_tutorial_button_2 = pygame.image.load(imagepath + '\End Tutorial Button Hovered Over.png')
 intro_tutorial_screen = pygame.image.load(imagepath + '\Intro Tutorial Screen.png')
 # start_img = pygame.image.load(resource_path('start_btn.png')).convert_alpha()
 
@@ -272,7 +275,11 @@ font = pygame.font.SysFont('Georgia',40,bold=True)
 surf = font.render('Quit',True, 'white')
 button = pygame.Rect(200,200,110,60)
 button_2 = pygame.Rect(CX(110),CY(60),110,60)
-button_3 = pygame.Rect(CX(0),CY(-100),110,60)
+button_3 = end_tutorial_button_2.get_rect()
+button_3_x = 650
+button_3_y = 40
+button_3.center = (button_3_x + 248,button_3_y + 63)
+#pygame.Rect(CX(0),CY(-100),110,60)
 sawbladeR_x = -100
 sawbladeR_y = 92
 sawbladeL_x = 1300
@@ -285,7 +292,7 @@ sawbladeD_y = -100
 # ----------
 
 while running:
-    screen.fill("purple")
+    screen.fill("black")
     # poll for events
     # pygame.QUIT event means the user clicked X to close your window
     for event in pygame.event.get():
@@ -327,16 +334,18 @@ while running:
     if SC("Tutorial"):
         screen.blit(intro_tutorial_screen,(0,0))
         if button_hovered_over(button_3):
-            pygame.draw.rect(screen,(180,180,180),button_3)
+            screen.blit(end_tutorial_button_2,(button_3_x + 0, button_3_y + 0))
+            # pygame.draw.rect(screen,(180,180,180),button_3)
         else:
-            pygame.draw.rect(screen,(110,110,110),button_3)
+            screen.blit(end_tutorial_button,(button_3_x + 0, button_3_y + 0))
+            # pygame.draw.rect(screen,(110,110,110),button_3)
     if SC("Game"):
 
         # if (randomizer_timer < float(givetime())):
         #     random_seed_list = [random.randint(0, 99) for _ in range(100)]
         #     randomizer_timer += 1
         if (player_health <= 0):
-            running = False
+            screen_type = "Death"
         screen.blit(select_img, (player_pos))
         grid_swap_speed = 1.0
         # egg = font.render(str(player_pos.x) + ' ' + str(player_pos.y),True, 'white')
@@ -387,8 +396,12 @@ while running:
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeU_x,sawbladeU_y))
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeD_x,sawbladeD_y))
         seconds_elapsed += dt
+    if SC("Death"):
+        time_to_display = truncate((float(givetime()) + timer_bonus), 3)
+        timer = font.render(f"Timer: " + str((time_to_display)),True, 'white')
+        screen.blit(timer,(0, 50))
+        # running = False
         
-
     # flip() the display to put your work on screen
     pygame.display.flip()
     # time.sleep(0.1)
