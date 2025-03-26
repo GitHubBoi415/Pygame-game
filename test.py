@@ -267,6 +267,7 @@ sawblade_img = pygame.image.load(imagepath + '\Sawblade.png')
 end_tutorial_button = pygame.image.load(imagepath + '\End Tutorial Button.png')
 end_tutorial_button_2 = pygame.image.load(imagepath + '\End Tutorial Button Hovered Over.png')
 intro_tutorial_screen = pygame.image.load(imagepath + '\Intro Tutorial Screen.png')
+death_screen = pygame.image.load(imagepath + '\Death Screen.png')
 # start_img = pygame.image.load(resource_path('start_btn.png')).convert_alpha()
 
 player_pos = pygame.Vector2((screen.get_width()/2) - 8, (screen.get_height()/2) - 8)
@@ -397,9 +398,10 @@ while running:
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeD_x,sawbladeD_y))
         seconds_elapsed += dt
     if SC("Death"):
+        screen.blit(death_screen,(0,0))
         time_to_display = truncate((float(givetime()) + timer_bonus), 3)
-        timer_length = len("Timer: " + str((time_to_display)))
-        timer = font.render(f"Timer: " + str((time_to_display)),True, 'white')
+        timer_length = len("Final Time: " + str((time_to_display)))
+        timer = font.render(f"Final Time: " + str((time_to_display)),True, 'white')
         screen.blit(timer,(CX(timer_length*20), CY(0)))
         # running = False
         
