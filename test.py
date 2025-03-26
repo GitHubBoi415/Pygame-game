@@ -3,7 +3,6 @@ import os
 import sys
 import time
 import random
-import threading
 
 def resource_path(relative_path):
         try:
@@ -38,15 +37,15 @@ grid_array_info = [0] * 100
 def imgFromNumber(number):
     actual_number = number
     # actual_number = (round(random_seed_list[grid_number]) + number) % 12
-    match actual_number % 12:
+    match actual_number % 32:
         case 0:
             return clock_img
         case 1:
             return dice_img
         case 2:
-            return bomb_img
+            return reset_img
         case 3:
-            return dice_img
+            return bomb_img
         case 4:
             return clock_img
         case 5:
@@ -85,7 +84,7 @@ def drawGrid():
         for y in range(grid_ymin, grid_ymin + WINDOW_HEIGHT, blockSize):
             y_counter += 1
             grid_identification_number = (10*y_counter) + x_counter
-            target = round((float(givetime()) + random_seed) * (grid_swap_speed * 0.01) * random_seed_list[grid_identification_number] + grid_identification_number) % 12
+            target = round((float(givetime()) + random_seed) * (grid_swap_speed * 0.01) * random_seed_list[grid_identification_number] + grid_identification_number) % 32
             if ((grid_array_info[grid_identification_number]) == 0):
                 # screen.blit(imgFromNumber(random_seed + round(float(givetime()) * (0.1 * random_seed_list[grid_identification_number]) + (grid_identification_number + (random_seed_list[grid_identification_number]) * random_seed_list[grid_identification_number])) % 12), (x,y))
                 screen.blit(imgFromNumber(target), (x,y))
@@ -97,9 +96,10 @@ def drawGrid():
                     case 1:
                         random_seed_list = [random.randint(0, 99) for _ in range(100)]
                     case 2:
-                        player_health -= 1
+                        for i in range(100):
+                            grid_array_info[i] = 0
                     case 3:
-                        random_seed_list = [random.randint(0, 99) for _ in range(100)]
+                        player_health -= 1
                     case 4:
                         timer_bonus += 5
                     case 5:
@@ -214,6 +214,22 @@ def movement():
 def parallel_process():
     while True:
         time.sleep(3)
+
+def rot_center(image, angle):
+    orig_rect = image.get_rect()
+    rot_image = pygame.transform.rotate(image, angle)
+    rot_rect = orig_rect.copy()
+    rot_rect.center = rot_image.get_rect().center
+    rot_image = rot_image.subsurface(rot_rect).copy()
+    return rot_image
+
+def coordinates_touching(playerx,playery,sawbladex,sawbladey,range):
+    x_range_min = playerx - range/2
+    x_range_max = playerx + range/2
+    y_range_min = playery - range/2
+    y_range_max = playery + range/2
+    if ((x_range_min < sawbladex < x_range_max) and (y_range_min < sawbladey < y_range_max)):
+        return True
 # ----------
 
 pygame.init()
@@ -245,6 +261,8 @@ dice_img = pygame.image.load(imagepath + '\Dice.png')
 heal_img = pygame.image.load(imagepath + '\Heal.png')
 skull_img = pygame.image.load(imagepath + '\Skull.png')
 disabled_img = pygame.image.load(imagepath + '\Disabled.png')
+reset_img = pygame.image.load(imagepath + '\Reset.png')
+sawblade_img = pygame.image.load(imagepath + '\Sawblade.png')
 # start_img = pygame.image.load(resource_path('start_btn.png')).convert_alpha()
 
 player_pos = pygame.Vector2((screen.get_width()/2) - 8, (screen.get_height()/2) - 8)
@@ -254,6 +272,14 @@ surf = font.render('Quit',True, 'white')
 button = pygame.Rect(200,200,110,60)
 button_2 = pygame.Rect(CX(110),CY(60),110,60)
 button_3 = pygame.Rect(CX(0),CY(-100),110,60)
+sawbladeR_x = -100
+sawbladeR_y = 92
+sawbladeL_x = 1300
+sawbladeL_y = 92 + (blockSize * 9)
+sawbladeU_x = 242
+sawbladeU_y = 1000
+sawbladeD_x = 242 + (blockSize * 9)
+sawbladeD_y = -100
 
 # ----------
 
@@ -265,16 +291,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if button.collidepoint(event.pos):
-                pygame.quit()
-            if button_2.collidepoint(event.pos):
-                screen_type = "Tutorial"
-                # t = threading.Thread(target=parallel_process)
-                # t.start()
-            if button_3.collidepoint(event.pos):
-                screen_type = "Game"
-                seconds_elapsed = 0
-                randomizer_timer = 0
+            if SC("Menu"):
+                if button.collidepoint(event.pos):
+                    pygame.quit()
+                if button_2.collidepoint(event.pos):
+                    screen_type = "Tutorial"
+                    # t = threading.Thread(target=parallel_process)
+                    # t.start()
+            if SC("Tutorial"):
+                if button_3.collidepoint(event.pos):
+                    screen_type = "Game"
+                    seconds_elapsed = 0
+                    randomizer_timer = 0
 
         if SC("Game"):
             movement()
@@ -322,16 +350,45 @@ while running:
         health_display = font.render(f"HP: " + str((player_health)),True, 'white')
         screen.blit(timer,(0, 50))
         screen.blit(health_display,(0, 100))
-        seconds_elapsed += dt
         drawGrid()
+        if (sawbladeR_x > 1300):
+            sawbladeR_x = -100
+            sawbladeR_y = (random.randint(0, 9) * blockSize) + 92
+        if (sawbladeL_x < -100):
+            sawbladeL_x = 1300
+            sawbladeL_y = (random.randint(0, 9) * blockSize) + 92
+        if (sawbladeU_y < -100):
+            sawbladeU_x = (random.randint(0, 9) * blockSize) + 242
+            sawbladeU_y = 1000
+        if (sawbladeD_y > 1000):
+            sawbladeD_x = (random.randint(0, 9) * blockSize) + 242
+            sawbladeD_y = -100
+        sawblade_speed = (float(seconds_elapsed)/2) + 5
+        sawbladeR_x += sawblade_speed + 1
+        sawbladeL_x -= sawblade_speed + 2
+        sawbladeU_y -= sawblade_speed + 3
+        sawbladeD_y += sawblade_speed + 4
+        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeR_x,sawbladeR_y,50)):
+            print("RIGHT TOUCHING")
+        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeL_x,sawbladeL_y,50)):
+            print("LEFT TOUCHING")
+        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeU_x,sawbladeU_y,50)):
+            print("UP TOUCHING")
+        if (coordinates_touching(player_pos.x,player_pos.y,sawbladeD_x,sawbladeD_y,50)):
+            print("DOWN TOUCHING")
+        screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeR_x,sawbladeR_y))
+        screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeL_x,sawbladeL_y))
+        screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeU_x,sawbladeU_y))
+        screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeD_x,sawbladeD_y))
+        seconds_elapsed += dt
+        
 
     # flip() the display to put your work on screen
     pygame.display.flip()
     # time.sleep(0.1)
 
     # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
+    # dt is delta time in seconds since last frame, used for framerate-independent physics.
     dt = clock.tick(60) / 1000
 
 pygame.quit()
