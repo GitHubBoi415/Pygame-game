@@ -280,6 +280,7 @@ button_3 = end_tutorial_button_2.get_rect()
 button_3_x = 650
 button_3_y = 40
 button_3.center = (button_3_x + 248,button_3_y + 63)
+button_return_to_menu = pygame.Rect(CX(0),CY(-100),110,60)
 #pygame.Rect(CX(0),CY(-100),110,60)
 sawbladeR_x = -100
 sawbladeR_y = 92
@@ -312,6 +313,17 @@ while running:
                     screen_type = "Game"
                     seconds_elapsed = 0
                     randomizer_timer = 0
+            if SC("Death"):
+                if button_return_to_menu.collidepoint(event.pos):
+                    screen_type = "Menu"
+                    random_seed = random.randint(999, 999999)
+                    random_seed_list = [random.randint(0, 99) for _ in range(100)]
+                    timer_bonus = 0
+                    grid_swap_speed = 1
+                    player_health = 5
+                    for i in range(100):
+                        grid_array_info[i] = 0
+                    player_pos = pygame.Vector2((screen.get_width()/2) - 8, (screen.get_height()/2) - 8)
 
         if SC("Game"):
             movement()
@@ -403,6 +415,10 @@ while running:
         timer_length = len("Final Time: " + str((time_to_display)))
         timer = font.render(f"Final Time: " + str((time_to_display)),True, 'white')
         screen.blit(timer,(CX(timer_length*20), CY(0)))
+        if button_hovered_over(button_return_to_menu):
+            pygame.draw.rect(screen,(180,180,180),button_return_to_menu)
+        else:
+            pygame.draw.rect(screen,(110,110,110),button_return_to_menu)
         # running = False
         
     # flip() the display to put your work on screen
