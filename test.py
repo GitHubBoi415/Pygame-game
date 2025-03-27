@@ -130,8 +130,8 @@ def wait_until_key_released(key):
         time.sleep(0.01)    # Small delay to prevent excessive CPU usage
 
 def display_time(seconds):
-    minutes, seconds = divmod(seconds, 60)
-    hours, minutes = divmod(minutes, 60)
+    # minutes, seconds = divmod(seconds, 60)
+    # hours, minutes = divmod(minutes, 60)
     # return f"{hours:02}:{minutes:02}:{seconds:02}"
     # return f"{seconds:02}"
     return seconds
@@ -193,16 +193,16 @@ def movement():
     player_xmin_limit = round(CX(WINDOW_WIDTH))
     player_ymin_limit = round(CY(WINDOW_HEIGHT))
     if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_w:
+        if (event.key == pygame.K_UP) or (event.key == pygame.K_w):
             if (player_ymin_limit < player_pos.y):
                 player_pos.y -= blockSize
-        elif event.key == pygame.K_a:
+        elif (event.key == pygame.K_LEFT) or (event.key == pygame.K_a):
             if (player_xmin_limit < player_pos.x):
                 player_pos.x -= blockSize
-        elif event.key == pygame.K_s:
+        elif (event.key == pygame.K_DOWN) or (event.key == pygame.K_s):
             if (player_ymin_limit + 600 > player_pos.y):
                 player_pos.y += blockSize
-        elif event.key == pygame.K_d:
+        elif (event.key == pygame.K_RIGHT) or (event.key == pygame.K_d):
             if (player_xmin_limit + 600 > player_pos.x):
                 player_pos.x += blockSize
         elif event.key == pygame.K_SPACE:
@@ -375,11 +375,11 @@ while running:
         if (sawbladeD_y > 1000):
             sawbladeD_x = (random.randint(0, 9) * blockSize) + 242
             sawbladeD_y = -100
-        sawblade_speed = (float(seconds_elapsed)/2) + 5
-        sawbladeR_x += sawblade_speed + 1
-        sawbladeL_x -= sawblade_speed + 2
-        sawbladeU_y -= sawblade_speed + 3
-        sawbladeD_y += sawblade_speed + 4
+        sawblade_speed = (float(seconds_elapsed)/5) + 2
+        sawbladeR_x += sawblade_speed + 0.1
+        sawbladeL_x -= sawblade_speed + 0.2
+        sawbladeU_y -= sawblade_speed + 0.3
+        sawbladeD_y += sawblade_speed + 0.4
         if (coordinates_touching(player_pos.x,player_pos.y,sawbladeR_x,sawbladeR_y,130)):
             player_health -= 1
             sawbladeR_x = 1300
