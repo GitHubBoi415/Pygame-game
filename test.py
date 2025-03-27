@@ -335,6 +335,14 @@ while running:
                     for i in range(100):
                         grid_array_info[i] = 0
                     player_pos = pygame.Vector2((screen.get_width()/2) - 8, (screen.get_height()/2) - 8)
+                    sawbladeR_x = -100
+                    sawbladeR_y = 92
+                    sawbladeL_x = 1300
+                    sawbladeL_y = 92 + (blockSize * 9)
+                    sawbladeU_x = 242  
+                    sawbladeU_y = 1000
+                    sawbladeD_x = 242 + (blockSize * 9)
+                    sawbladeD_y = -100
 
         if SC("Game"):
             movement()
