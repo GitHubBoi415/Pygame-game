@@ -268,19 +268,30 @@ end_tutorial_button = pygame.image.load(imagepath + '\End Tutorial Button.png')
 end_tutorial_button_2 = pygame.image.load(imagepath + '\End Tutorial Button Hovered Over.png')
 intro_tutorial_screen = pygame.image.load(imagepath + '\Intro Tutorial Screen.png')
 death_screen = pygame.image.load(imagepath + '\Death Screen.png')
+return_to_main_menu = pygame.image.load(imagepath + '\Return to Main Menu.png')
+return_to_main_menu_hovered = pygame.image.load(imagepath + '\Return to Main Menu Hovered Over.png')
+start_button_img = pygame.image.load(imagepath + '\START.png')
+start_button_img_2 = pygame.image.load(imagepath + '\START_2.png')
 # start_img = pygame.image.load(resource_path('start_btn.png')).convert_alpha()
 
 player_pos = pygame.Vector2((screen.get_width()/2) - 8, (screen.get_height()/2) - 8)
 
 font = pygame.font.SysFont('Georgia',40,bold=True)
 surf = font.render('Quit',True, 'white')
-button = pygame.Rect(200,200,110,60)
-button_2 = pygame.Rect(CX(110),CY(60),110,60)
+button = pygame.Rect(50,50,110,60)
+button_2 = start_button_img.get_rect()
+# pygame.Rect(CX(110),CY(60),110,60)
+button_2_x = CX(212 * 2)
+button_2_y = CY(51 * 2)
+button_2.center = (button_2_x + 212, button_2_y + 51)
 button_3 = end_tutorial_button_2.get_rect()
 button_3_x = 650
 button_3_y = 40
-button_3.center = (button_3_x + 248,button_3_y + 63)
-button_return_to_menu = pygame.Rect(CX(0),CY(-100),110,60)
+button_3.center = (button_3_x + 248, button_3_y + 63)
+button_4 = return_to_main_menu.get_rect()
+button_4_x = CX(262*2)
+button_4_y = 650
+button_4.center = (button_4_x + 262, button_4_y + 45)
 #pygame.Rect(CX(0),CY(-100),110,60)
 sawbladeR_x = -100
 sawbladeR_y = 92
@@ -314,7 +325,7 @@ while running:
                     seconds_elapsed = 0
                     randomizer_timer = 0
             if SC("Death"):
-                if button_return_to_menu.collidepoint(event.pos):
+                if button_4.collidepoint(event.pos):
                     screen_type = "Menu"
                     random_seed = random.randint(999, 999999)
                     random_seed_list = [random.randint(0, 99) for _ in range(100)]
@@ -340,9 +351,11 @@ while running:
             pygame.draw.rect(screen,(110,110,110),button)
 
         if button_hovered_over(button_2):
-            pygame.draw.rect(screen,(180,180,180),button_2)
+            screen.blit(start_button_img_2,(button_2_x + 0, button_2_y + 0))
+            # pygame.draw.rect(screen,(180,180,180),button_2)
         else:
-            pygame.draw.rect(screen,(110,110,110),button_2)
+            screen.blit(start_button_img,(button_2_x + 0, button_2_y + 0))
+            # pygame.draw.rect(screen,(110,110,110),button_2)
         screen.blit(surf,(button.x+5, button.y+5))
     if SC("Tutorial"):
         screen.blit(intro_tutorial_screen,(0,0))
@@ -415,10 +428,10 @@ while running:
         timer_length = len("Final Time: " + str((time_to_display)))
         timer = font.render(f"Final Time: " + str((time_to_display)),True, 'white')
         screen.blit(timer,(CX(timer_length*20), CY(0)))
-        if button_hovered_over(button_return_to_menu):
-            pygame.draw.rect(screen,(180,180,180),button_return_to_menu)
+        if button_hovered_over(button_4):
+            screen.blit(return_to_main_menu_hovered,(button_4_x + 0, button_4_y + 0))
         else:
-            pygame.draw.rect(screen,(110,110,110),button_return_to_menu)
+            screen.blit(return_to_main_menu,(button_4_x + 0, button_4_y + 0))
         # running = False
         
     # flip() the display to put your work on screen
