@@ -94,28 +94,40 @@ def drawGrid():
                 match int(target):
                     case 0:
                         timer_bonus += 5
+                        clock_sfx.play()
                     case 1:
+                        crunch_sfx.play()
                         random_seed_list = [random.randint(0, 99) for _ in range(100)]
                     case 2:
                         for i in range(100):
                             grid_array_info[i] = 0
+                        cymbal_sfx.play()
                     case 3:
                         player_health -= 1
+                        explo_sfx.play()
                     case 4:
                         timer_bonus += 5
+                        clock_sfx.play()
                     case 5:
                         player_health -= 1
+                        explo_sfx.play()
                     case 6:
+                        crunch_sfx.play()
                         random_seed_list = [random.randint(0, 99) for _ in range(100)]
                     case 7:
                         timer_bonus += 5
+                        clock_sfx.play()
                     case 8:
+                        crunch_sfx.play()
                         random_seed_list = [random.randint(0, 99) for _ in range(100)]
                     case 9:
                         player_health -= 1
+                        explo_sfx.play()
                     case 10:
                         player_health += 1
+                        glug_sfx.play()
                     case 11:
+                        death_sfx.play()
                         screen_type = "Death"
                     case _:
                         print(target)
@@ -245,15 +257,15 @@ timer_bonus = 0
 grid_swap_speed = 1
 player_health = 5
 
-pygame.display.set_caption('i love being able to edit what the pygame window says')
+pygame.display.set_caption('I love you pygame!!! <3')
 
 # WINDOWS
-imagepath = os.path.abspath(__file__)[:-len(os.path.basename(__file__))] + "\images"
+imagepath = os.path.abspath(__file__)[:-len(os.path.basename(__file__))] + "\data"
 
 # MAC
 # imagepath = 
 # IMPORTANT!!! when distributing, use the lower line, the top one is for your personal 'puter
-start_img = pygame.transform.scale(pygame.image.load(imagepath + '\start_btn.png').convert_alpha(),(60,700))
+# start_img = pygame.transform.scale(pygame.image.load(imagepath + '\start_btn.png').convert_alpha(),(60,700))
 select_img = pygame.image.load(imagepath + '\Select.png')
 blank_img = pygame.image.load(imagepath + '\Blank.png')
 bomb_img = pygame.image.load(imagepath + '\Bomb.png')
@@ -273,6 +285,15 @@ return_to_main_menu_hovered = pygame.image.load(imagepath + '\Return to Main Men
 start_button_img = pygame.image.load(imagepath + '\START.png')
 start_button_img_2 = pygame.image.load(imagepath + '\START_2.png')
 # start_img = pygame.image.load(resource_path('start_btn.png')).convert_alpha()
+
+click_sfx = pygame.mixer.Sound(imagepath + '\pop.wav')
+death_sfx = pygame.mixer.Sound(imagepath + '\death.wav')
+cymbal_sfx = pygame.mixer.Sound(imagepath + '\crash cymbal.wav')
+glug_sfx = pygame.mixer.Sound(imagepath + '\glug.wav')
+crunch_sfx = pygame.mixer.Sound(imagepath + '\crunch.wav')
+clang_sfx = pygame.mixer.Sound(imagepath + '\clang.wav')
+clock_sfx = pygame.mixer.Sound(imagepath + '\clock.wav')
+explo_sfx = pygame.mixer.Sound(imagepath + '\explo squish.wav')
 
 player_pos = pygame.Vector2((screen.get_width()/2) - 8, (screen.get_height()/2) - 8)
 
@@ -316,16 +337,19 @@ while running:
                 if button.collidepoint(event.pos):
                     pygame.quit()
                 if button_2.collidepoint(event.pos):
+                    click_sfx.play()
                     screen_type = "Tutorial"
                     # t = threading.Thread(target=parallel_process)
                     # t.start()
             if SC("Tutorial"):
                 if button_3.collidepoint(event.pos):
+                    click_sfx.play()
                     screen_type = "Game"
                     seconds_elapsed = 0
                     randomizer_timer = 0
             if SC("Death"):
                 if button_4.collidepoint(event.pos):
+                    click_sfx.play()
                     screen_type = "Menu"
                     random_seed = random.randint(999, 999999)
                     random_seed_list = [random.randint(0, 99) for _ in range(100)]
@@ -384,7 +408,7 @@ while running:
         grid_swap_speed = 1.0
         # egg = font.render(str(player_pos.x) + ' ' + str(player_pos.y),True, 'white')
         egg = font.render('fps: ' + str(clock)[11:16],True, 'white')
-        screen.blit(egg,(0, 0))
+        # screen.blit(egg,(0, 850))
         start_time = time.time()
         end_time = time.time()
         # elapsed_time = end_time - start_times
@@ -393,8 +417,8 @@ while running:
         timer = font.render(f"Timer: " + str((time_to_display)),True, 'white')
         # timer = font.render(f"Timer: " + str(givetime()),3,True, 'white')
         health_display = font.render(f"HP: " + str((player_health)),True, 'white')
-        screen.blit(timer,(0, 50))
-        screen.blit(health_display,(0, 100))
+        screen.blit(timer,(0, 0))
+        screen.blit(health_display,(0, 50))
         drawGrid()
         if (sawbladeR_x > 1300):
             sawbladeR_x = -100
@@ -416,15 +440,19 @@ while running:
         if (coordinates_touching(player_pos.x,player_pos.y,sawbladeR_x,sawbladeR_y,130)):
             player_health -= 1
             sawbladeR_x = 1300
+            clang_sfx.play()
         if (coordinates_touching(player_pos.x,player_pos.y,sawbladeL_x,sawbladeL_y,130)):
             player_health -= 1
             sawbladeL_x = -100
+            clang_sfx.play()
         if (coordinates_touching(player_pos.x,player_pos.y,sawbladeU_x,sawbladeU_y,130)):
             player_health -= 1
             sawbladeU_y = -100
+            clang_sfx.play()
         if (coordinates_touching(player_pos.x,player_pos.y,sawbladeD_x,sawbladeD_y,130)):
             player_health -= 1
             sawbladeD_y = 1000
+            clang_sfx.play()
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeR_x,sawbladeR_y))
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeL_x,sawbladeL_y))
         screen.blit(rot_center(sawblade_img, float(seconds_elapsed) * 1000),(sawbladeU_x,sawbladeU_y))
