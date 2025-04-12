@@ -266,7 +266,7 @@ imagepath = os.path.abspath(__file__)[:-len(os.path.basename(__file__))] + "data
 # imagepath = 
 # IMPORTANT!!! when distributing, use the lower line, the top one is for your personal 'puter
 # start_img = pygame.transform.scale(pygame.image.load(imagepath + '\start_btn.png').convert_alpha(),(60,700))
-'''
+
 select_img = pygame.image.load(imagepath + '\Select.png')
 blank_img = pygame.image.load(imagepath + '\Blank.png')
 bomb_img = pygame.image.load(imagepath + '\Bomb.png')
@@ -285,6 +285,8 @@ return_to_main_menu = pygame.image.load(imagepath + '\Return to Main Menu.png')
 return_to_main_menu_hovered = pygame.image.load(imagepath + '\Return to Main Menu Hovered Over.png')
 start_button_img = pygame.image.load(imagepath + '\START.png')
 start_button_img_2 = pygame.image.load(imagepath + '\START_2.png')
+menu_img = pygame.image.load(imagepath + '\Menu Screen.png')
+
 
 click_sfx = pygame.mixer.Sound(imagepath + '\pop.wav')
 death_sfx = pygame.mixer.Sound(imagepath + '\death.wav')
@@ -294,9 +296,10 @@ crunch_sfx = pygame.mixer.Sound(imagepath + '\crunch.wav')
 clang_sfx = pygame.mixer.Sound(imagepath + '\clang.wav')
 clock_sfx = pygame.mixer.Sound(imagepath + '\clock.wav')
 explo_sfx = pygame.mixer.Sound(imagepath + '\explo squish.wav')
-'''
+
 
 # start_img = pygame.image.load(resource_path('start_btn.png')).convert_alpha()
+'''
 select_img = pygame.image.load(resource_path('Select.png')).convert_alpha()
 blank_img = pygame.image.load(resource_path('Blank.png')).convert_alpha()
 bomb_img = pygame.image.load(resource_path('Bomb.png')).convert_alpha()
@@ -315,6 +318,7 @@ return_to_main_menu = pygame.image.load(resource_path('Return to Main Menu.png')
 return_to_main_menu_hovered = pygame.image.load(resource_path('Return to Main Menu Hovered Over.png')).convert_alpha()
 start_button_img = pygame.image.load(resource_path('START.png')).convert_alpha()
 start_button_img_2 = pygame.image.load(resource_path('START_2.png')).convert_alpha()
+menu_img = pygame.image.load(resource_path('Menu Screen.png')).convert_alpha()
 
 click_sfx = pygame.mixer.Sound(resource_path('pop.wav'))
 death_sfx = pygame.mixer.Sound(resource_path('death.wav'))
@@ -324,6 +328,7 @@ crunch_sfx = pygame.mixer.Sound(resource_path('crunch.wav'))
 clang_sfx = pygame.mixer.Sound(resource_path('clang.wav'))
 clock_sfx = pygame.mixer.Sound(resource_path('clock.wav'))
 explo_sfx = pygame.mixer.Sound(resource_path('explo squish.wav'))
+'''
 
 player_pos = pygame.Vector2((screen.get_width()/2) - 8, (screen.get_height()/2) - 8)
 
@@ -407,6 +412,7 @@ while running:
     player_y = 0
     
     if SC("Menu"):
+        screen.blit(menu_img,(0,0))
         if button_hovered_over(button):
             pygame.draw.rect(screen,(180,180,180),button)
         else:
