@@ -1,4 +1,4 @@
 #VSCode
 build/
 dist/
-Pygame-game.spec
+game.spec
