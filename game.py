@@ -266,7 +266,7 @@ imagepath = os.path.abspath(__file__)[:-len(os.path.basename(__file__))] + "data
 # imagepath = 
 # IMPORTANT!!! when distributing, use the lower line, the top one is for your personal 'puter
 # start_img = pygame.transform.scale(pygame.image.load(imagepath + '\start_btn.png').convert_alpha(),(60,700))
-
+'''
 select_img = pygame.image.load(imagepath + '\Select.png')
 blank_img = pygame.image.load(imagepath + '\Blank.png')
 bomb_img = pygame.image.load(imagepath + '\Bomb.png')
@@ -296,10 +296,10 @@ crunch_sfx = pygame.mixer.Sound(imagepath + '\crunch.wav')
 clang_sfx = pygame.mixer.Sound(imagepath + '\clang.wav')
 clock_sfx = pygame.mixer.Sound(imagepath + '\clock.wav')
 explo_sfx = pygame.mixer.Sound(imagepath + '\explo squish.wav')
-
+'''
 
 # start_img = pygame.image.load(resource_path('start_btn.png')).convert_alpha()
-'''
+
 select_img = pygame.image.load(resource_path('Select.png')).convert_alpha()
 blank_img = pygame.image.load(resource_path('Blank.png')).convert_alpha()
 bomb_img = pygame.image.load(resource_path('Bomb.png')).convert_alpha()
@@ -328,7 +328,7 @@ crunch_sfx = pygame.mixer.Sound(resource_path('crunch.wav'))
 clang_sfx = pygame.mixer.Sound(resource_path('clang.wav'))
 clock_sfx = pygame.mixer.Sound(resource_path('clock.wav'))
 explo_sfx = pygame.mixer.Sound(resource_path('explo squish.wav'))
-'''
+
 
 player_pos = pygame.Vector2((screen.get_width()/2) - 8, (screen.get_height()/2) - 8)
 
