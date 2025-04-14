@@ -257,7 +257,7 @@ timer_bonus = 0
 grid_swap_speed = 1
 player_health = 5
 
-pygame.display.set_caption('I love you pygame!!! <3')
+pygame.display.set_caption('Pygame game')
 
 # WINDOWS
 imagepath = os.path.abspath(__file__)[:-len(os.path.basename(__file__))] + "data"
